@@ -7,30 +7,28 @@ function Game(){
     const [win, setWin] = useState(false);
     const [score, setScore] = useState(0);
     const [highscore, setHighScore] = useState(0);
-    const [clicked, setClicked] = useState([]);
     const [level, setLevel] = useState(1);
+    const [clicked, setClicked] = useState([]);
     
-    const updateScore = async () => await setScore(prev => prev + 1);
-    const updateHighScore = async () => await setHighScore(score + 1);
-    const updateLevel = async () => await setLevel(prev => prev + 1);
-    const handleClick = (event) =>
+    const updateScore =  () => {setScore(score => score + 1)};
+    const updateHighScore =  () => {setHighScore(score + 1)};
+    const updateLevel =  () => {setLevel(prev => prev + 1)};
+    const click = (event) =>
     {
-        console.log(event.target);
-        if(clicked.includes(event.target))
+        if(clicked.includes(event.currentTarget))
         {
-            console.log("got it");
             setClicked([]);
             setScore(0);
-            setLevel(1);
         }
         else
         {
-            setClicked([...clicked, event.target]);
-            updateScore();
-            if (score >= highscore) 
+            setClicked(arr => [...arr, event.currentTarget])
+            setScore(prev => prev + 1)
+            if(score >= highscore)
             {
-                updateHighScore();
+                setHighScore(prev => prev + 1);
             }
+
         }
     }
     useEffect(() =>
@@ -60,16 +58,19 @@ function Game(){
                     break;
                 }
             default:
+                {
+                    console.log(clicked.length)
+                }
 
         }
 
-    }, [score, highscore])
+    }, [score])
 
     return(
         <div className="Main">
             {win && <Victory/>}
             <Header level={level} score={score} highscore={highscore}/>
-            <MarvelCharacters level={level} score={score} highscore={highscore} handleClick={handleClick}/>
+            <MarvelCharacters level={level} score={score} highscore={highscore} handleClick={click}/>
 
         </div>
     )

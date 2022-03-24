@@ -49,7 +49,7 @@ function MarvelCharacters(props)
         let shuffle = [...showcase];
         shuffleArray(shuffle);
         setshowcase(shuffle);
-    }, [score])
+    }, [score, highscore])
 
 
     const style = {
