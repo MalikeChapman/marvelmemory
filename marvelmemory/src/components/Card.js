@@ -4,7 +4,7 @@ function Card(props)
 {
     const {data, handleClick} = props;
     return (
-        <div className="Card-Div" onClick={handleClick}>
+        <div className="Card-Div" onClick={(event) => handleClick(event)}>
             <div className="Img-Div">
                 <img src={`${data.thumbnail.path}/portrait_xlarge.${data.thumbnail.extension}`} alt=""/>
             </div>
