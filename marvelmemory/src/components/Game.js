@@ -16,10 +16,8 @@ function Game(){
     const updateLevel =  () => {setLevel(prev => prev + 1)};
     const click = (event) =>
     {
-        console.log(event.currentTarget);
         let array = [...savedArray, event.currentTarget];
         setSavedArray(array);
-        console.log(savedArray);
         if(savedArray.includes(event.currentTarget))
         {
             setSavedArray([]);
@@ -35,6 +33,7 @@ function Game(){
             }
         }
     }
+   
     
     useEffect(() =>
     {
@@ -45,27 +44,27 @@ function Game(){
                     if(score === 5)
                     {
                         updateLevel();
-                        console.log("ok");
+                        setSavedArray([])
                         
                     }
                     break;
                 }
             case 2:
                 {
-                    if(score === 10)
+                    if(score === 15)
                     {
                         updateLevel();
-                        console.log("ok");
+                        setSavedArray([])
                         
                     }
                     break;
                 }
             case 3:
                 {
-                    if(score === 15)
+                    if(score === 30)
                     {
                         updateLevel();
-                        console.log("ok");
+                        setSavedArray([])
                         
                     }
 
@@ -73,10 +72,10 @@ function Game(){
                 }
             case 4:
                 {
-                    if(score === 20)
+                    if(score === 50)
                     {
-                        updateLevel();
-                        console.log("ok");
+                        updateLevel();                       
+                        setSavedArray([])
                         
                     }
 

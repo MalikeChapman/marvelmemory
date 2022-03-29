@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import Card from "./Card";
 import { key } from "../key";
+import {v4 as uuid} from 'uuid';
 
 function MarvelCharacters(props)
 {
-   const {level, score, highscore, handleClick} = props;
+   const {level, score, highscore, handleClick, gameStart} = props;
    const [list, setList] = useState([]);
-   const [showcase, setshowcase] = useState([]);
+   const [showcase, setShowcase] = useState([]);
+   const firstRender = useRef(false);
     const params = new URLSearchParams({
         ts: key.ts,
         apikey: key.apikey,
@@ -15,10 +17,10 @@ function MarvelCharacters(props)
         
     });
     let characters = [];
-    const listFunc = async (data) => await 
+    const listFunc =  async (data) => await
         setList(data);
     
-    let marvelList = async () => await
+    let marvelList =  async () => await
     fetch(`https://gateway.marvel.com/v1/public/characters?${params}`, {
         method: "GET",
         
@@ -31,25 +33,63 @@ function MarvelCharacters(props)
         {
             let random = Math.floor(Math.random() * (holder.length + 1));
             const data = holder[random];
-            characters = [...characters, 
-            <Card key={i} level={level} score={score} handleClick={handleClick} data={data}/>]
+            characters = [...characters, {key: uuid(), data: data}]
         }
-        setshowcase(characters);
+        setShowcase(characters);
             
     });
     const shuffleArray = (array) => {
         array.sort((a, b) => 0.5 - Math.random());
     }
 
-    useEffect(() =>
+    useEffect( () =>
     {
         marvelList();
     }, []);
+
     useEffect(() =>{
+        console.log("test");
         let shuffle = [...showcase];
         shuffleArray(shuffle);
-        setshowcase(shuffle);
+        setShowcase(shuffle);
     }, [score, highscore])
+
+    useEffect(() =>
+    {
+        if(firstRender.current)
+        {
+            const updated = newArray();
+            setShowcase(updated);
+    
+        }
+        else
+        {
+            firstRender.current = true;
+        }
+    
+
+    }, [level])
+
+     function newArray ()
+    {
+        let array = [];
+        let holder = [...list];
+        for(let i = 1; i <= (level * 5); i++)
+        {
+            const ran = Math.floor(Math.random() * (holder.length + 1));
+            const data = holder[ran];
+            console.log(data);
+            if(typeof data === "undefined")
+            {
+                console.log(ran + " data index");
+                continue;
+            }
+            array = [...array, {key: uuid(), data: data}];
+        }
+        return array;
+    }
+
+
 
 
     const style = {
@@ -61,10 +101,10 @@ function MarvelCharacters(props)
         justifyContent: "center"
     };
   
-
     return(
     <div className="Card-Grid" style={style}>
-        {showcase}
+      {showcase.map((card) =>
+      (<Card key={card.key} level={level} score={score} highscore={highscore} data={card.data} handleClick={handleClick}/>))}
     </div>)
 }
 
